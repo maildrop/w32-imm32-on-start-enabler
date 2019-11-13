@@ -30,13 +30,6 @@ static LRESULT CALLBACK hook_GetMsgProc( int code , WPARAM wParam , LPARAM lPara
           */
           
           DispatchMessage( msg ); 
-          
-          if( WM_USER <= msg->message &&
-              msg->message < 0x10000 ){
-            msg->message = WM_NULL;
-            msg->wParam = 0;
-            msg->lParam = 0;
-          }
           return CallNextHookEx( NULL , code , wParam , lParam );
         }
       }
