@@ -7,6 +7,12 @@ MS-IME は自身の通知に、hwnd == NULL でメッセージをポストして
 一旦最小化したり、タイトルバーを動かすと日本語入力できるようになるのは、この関数の中で、メッセージポンプが動くため。
 キーワードは KiUserCallbackDispatcher 
 
+
+-IMM32はどうやって、DefWindowProcをフックしているんだろう。
+-- IMM32 が WM_IME_SETCONTEXT で、DefWindowProc に渡された値を見ていることから、何かしらの方法で DefWindowProc をフックしていることは、わかる。
+-- WINEの実装を見ていると、NtUserInitializeClientPfnArraysでUser32にインジェクションしているように見える
+---これは非公開関数かい？
+
 - How to use
 -- コンパイルして、w32-imm32-on-start-enabler.el とw32-imm32-on-start-enabler-impl.dll を
  share\emacs\27.0.50\site-lisp に置く
