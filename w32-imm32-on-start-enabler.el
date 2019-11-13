@@ -26,8 +26,8 @@
 ;;; Code:
 
 (when (and (eq system-type 'windows-nt)
-	   (locate-library "w32-imm32-on-start-enabler-implement") )
-  (load "w32-imm32-on-start-enabler-implement"))
+	   (locate-library "w32-imm32-on-start-enabler-impl") )
+  (load "w32-imm32-on-start-enabler-impl"))
 
 (defvar w32-imm32-on-start-enabler-injected nil
   "In Windows, if it was injected a message hook that sends DispatchMessage() to Emacs GUI thread, set not nil, otherwise nil.")
@@ -37,9 +37,10 @@
   (when (eq system-type 'windows-nt)
     (unless w32-imm32-on-start-enabler-injected
       ;; TODO ここに dynamic module を導入する
-      (let ((window-handle (string-to-number (frame-parameter (selected-frame) 'window-id ))))
-	(message (format "window handle is %s" window-handle) ) )
-      (setq w32-imm32-on-start-enabler-injected t) )))
+      (let ((threadid (w32-imm32-on-start-enabler-impl-hwnd-to-threadid (string-to-number (frame-parameter (selected-frame) 'window-id)))))
+	    (when (and threadid (not (eq threadid 0)))
+          (setq w32-imm32-on-start-enabler-injected 
+                (w32_imm32_on_start_enabler_impl_inject threadid)))))))
 
 (defun w32-imm32-on-start-enabler-deinject ()
   "On Windows, remove the message hook that sends DispatchMessage () to the Emacs GUI thread if HWND is NULL"
