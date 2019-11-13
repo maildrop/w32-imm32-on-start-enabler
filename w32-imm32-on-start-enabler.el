@@ -5,7 +5,7 @@
 ;; Author: TOGURO Mikito <mit@shalab.net>
 ;; URL: https://github.com/maildrop/w32-imm32-on-start-enabler
 ;; Versio: 0.01
-;; Package-Requires:
+;; Package-Requires: w32-imm32-on-start-enabler-implement
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,6 +25,28 @@
 
 ;;; Code:
 
+(when (and (eq system-type 'windows-nt)
+	   (locate-library "w32-imm32-on-start-enabler-implement") )
+  (load "w32-imm32-on-start-enabler-implement"))
+
+(defvar w32-imm32-on-start-enabler-injected nil
+  "In Windows, if it was injected a message hook that sends DispatchMessage() to Emacs GUI thread, set not nil, otherwise nil.")
+
+(defun w32-imm32-on-start-enabler-inject ()
+  "In Windows, introduce a message hook that sends DispatchMessage() to Emacs GUI thread when HWND is NULL"
+  (when (eq system-type 'windows-nt)
+    (unless w32-imm32-on-start-enabler-injected
+      ;; TODO ここに dynamic module を導入する
+      (let ((window-handle (string-to-number (frame-parameter (selected-frame) 'window-id ))))
+	(message (format "window handle is %s" window-handle) ) )
+      (setq w32-imm32-on-start-enabler-injected t) )))
+
+(defun w32-imm32-on-start-enabler-deinject ()
+  "On Windows, remove the message hook that sends DispatchMessage () to the Emacs GUI thread if HWND is NULL"
+  (when (eq system-type 'windows-nt)
+    (when w32-imm32-on-start-enabler-injected
+      ;; TODO ここで dynamic module を外す
+      (setq w32-imm32-on-start-enabler-injected nil))))
 
 (provide 'w32-imm32-on-start-enabler)
 ;;; w32-imm32-on-start-enabler.el end here
