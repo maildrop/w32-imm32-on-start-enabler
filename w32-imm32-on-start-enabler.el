@@ -39,7 +39,7 @@
       ;; TODO ここに dynamic module を導入する
       (let ((threadid (w32-imm32-on-start-enabler-impl-hwnd-to-threadid (string-to-number (frame-parameter (selected-frame) 'window-id)))))
 	    (when (and threadid (not (eq threadid 0)))
-          (setq w32-imm32-on-start-enabler-injected 
+          (setq w32-imm32-on-start-enabler-injected
                 (w32_imm32_on_start_enabler_impl_inject threadid)))))))
 
 (defun w32-imm32-on-start-enabler-deinject ()
