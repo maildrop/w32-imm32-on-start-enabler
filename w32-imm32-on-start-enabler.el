@@ -36,11 +36,12 @@
   "In Windows, introduce a message hook that sends DispatchMessage() to Emacs GUI thread when HWND is NULL"
   (when (eq system-type 'windows-nt)
     (unless w32-imm32-on-start-enabler-injected
-      ;; TODO ここに dynamic module を導入する
-      (let ((threadid (w32-imm32-on-start-enabler-impl-hwnd-to-threadid (string-to-number (frame-parameter (selected-frame) 'window-id)))))
+      (if window-system
+          (let ((threadid (w32-imm32-on-start-enabler-impl-hwnd-to-threadid (string-to-number (frame-parameter (selected-frame) 'window-id)))))
 	    (when (and threadid (not (eq threadid 0)))
-          (setq w32-imm32-on-start-enabler-injected
-                (w32_imm32_on_start_enabler_impl_inject threadid)))))))
+              (setq w32-imm32-on-start-enabler-injected
+                    (w32_imm32_on_start_enabler_impl_inject threadid))))
+        (setq w32-imm32-on-start-enabler-injected t)))))
 
 (defun w32-imm32-on-start-enabler-deinject ()
   "On Windows, remove the message hook that sends DispatchMessage () to the Emacs GUI thread if HWND is NULL"
