@@ -1,5 +1,6 @@
 #include <tchar.h>
 #include <windows.h>
+#include <string>
 #include <array>
 #include "windows-hook.h"
 #include "emacs-module.h"
