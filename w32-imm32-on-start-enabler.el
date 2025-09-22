@@ -1,4 +1,4 @@
-;;; w32-imm32-on-start-enabler.el --- Package that solves the problem that IMM32 does not work immediately after starting due to an Emacs bug
+;;; w32-imm32-on-start-enabler.el --- Package that solves the problem that IMM32 does not work immediately after starting due to an Emacs bug -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 by TOGURO Mikito
 
